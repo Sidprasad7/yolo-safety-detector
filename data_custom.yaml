@@ -1,0 +1,6 @@
+train: F:\yolov8_custom\trains 
+val: F:\yolov8_custom\val
+
+nc: 2
+
+names: ["open", "close"]
