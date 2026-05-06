@@ -7,7 +7,7 @@
 
 ## 🎯 What It Does
 
-Automatically identifies whether workers are wearing the correct safety equipment in real-time from live camera feeds or video input — and outputs a **pass/fail safety check** for each detection.
+Automatically identifies whether workers are wearing the correct safety equipment from live camera feeds or video input — and outputs a **pass/fail safety check** for each detection.
 
 **Detected Classes:**
 - 🪖 Helmet
@@ -16,18 +16,16 @@ Automatically identifies whether workers are wearing the correct safety equipmen
 
 ---
 
-## 🧠 Model Variants
+## 🧠 Model Variants Trained
 
 All 4 YOLOv8 variants were trained and benchmarked on the same custom dataset:
 
-| Model | Size | Speed | Accuracy |
+| Model | Size | Speed | Best For |
 |---|---|---|---|
-| YOLOv8n | Nano | ⚡ Fastest | Good |
-| YOLOv8m | Medium | Fast | Better |
-| YOLOv8l | Large | Moderate | High |
-| YOLOv8x | Extra Large | Slower | Highest |
-
-> Use `n` for edge/real-time deployment, `x` for maximum accuracy.
+| YOLOv8n | Nano | ⚡ Fastest | Edge / real-time |
+| YOLOv8m | Medium | Fast | Balanced |
+| YOLOv8l | Large | Moderate | High accuracy |
+| YOLOv8x | Extra Large | Slower | Maximum accuracy |
 
 ---
 
@@ -35,18 +33,34 @@ All 4 YOLOv8 variants were trained and benchmarked on the same custom dataset:
 
 ```
 yolo-safety-detector/
-├── detect.py              # Run detection on image/video/webcam
-├── train.py               # Train model on custom dataset
-├── data.yaml              # Dataset configuration
-├── classes.txt            # Custom class definitions
-├── requirements.txt       # Python dependencies
-├── dataset/
-│   ├── images/            # Sample training images
-│   └── labels/            # LabelImg annotation files (.txt)
+├── detect.py                  # Run detection on image/video/webcam
+├── train.py                   # Train model on custom dataset
+├── data_custom.yaml           # Dataset configuration
+├── classes.txt                # Custom class definitions
+├── requirements.txt           # Python dependencies
 └── runs/
-    ├── train/             # Training results, metrics, graphs
-    └── detect/            # Sample detection outputs
+    └── detect/
+        └── train/             # Training results & metrics
+            ├── F1_curve.png
+            ├── PR_curve.png
+            ├── P_curve.png
+            ├── R_curve.png
+            ├── confusion_matrix.png
+            └── results.png
 ```
+
+---
+
+## 📊 Training Results
+
+| Metric | Detail |
+|---|---|
+| Model | YOLOv8 (n / m / l / x) |
+| Classes | 3 (helmet, harness, carabiner) |
+| Annotation Tool | LabelImg |
+| Label Format | YOLO .txt format |
+
+> See `runs/detect/train/` for full training curves and confusion matrix.
 
 ---
 
@@ -65,17 +79,17 @@ pip install -r requirements.txt
 
 **3. Run detection on an image**
 ```bash
-python detect.py --source your_image.jpg --weights runs/train/weights/best.pt
+python detect.py --source your_image.jpg --weights path/to/best.pt
 ```
 
 **4. Run detection on webcam**
 ```bash
-python detect.py --source 0 --weights runs/train/weights/best.pt
+python detect.py --source 0 --weights path/to/best.pt
 ```
 
 **5. Train on custom dataset**
 ```bash
-python train.py --data data.yaml --model yolov8n.pt --epochs 100
+python train.py --data data_custom.yaml --model yolov8n.pt --epochs 100
 ```
 
 ---
@@ -83,45 +97,33 @@ python train.py --data data.yaml --model yolov8n.pt --epochs 100
 ## 🏷️ Dataset & Annotation
 
 - Custom dataset built from scratch
-- Annotated manually using **LabelImg**
-- Labels in YOLO format (`.txt` per image)
-- 3 custom classes: helmet, harness, carabiner
+- Images manually annotated using **LabelImg**
+- Labels saved in YOLO format (`.txt` per image)
+- 3 custom classes defined in `classes.txt`
 
 ---
 
 ## 🔄 How It Works
 
 ```
-Live Camera / Video Input
-        ↓
-YOLOv8 Model (n / m / l / x)
-        ↓
-Bounding Box Detection
-        ↓
-Class Identification
-(helmet / harness / carabiner)
-        ↓
-Pass ✅  or  Fail ❌
-Safety Check Output
-```
-
----
-
-## 📦 Requirements
-
-```
-ultralytics
-opencv-python
-torch
-torchvision
-labelImg
+Live Camera / Video / Image Input
+            ↓
+    YOLOv8 Model (n/m/l/x)
+            ↓
+    Bounding Box Detection
+            ↓
+    Class Identification
+  (helmet / harness / carabiner)
+            ↓
+    ✅ Pass  or  ❌ Fail
+      Safety Check Output
 ```
 
 ---
 
 ## 📹 Demo
 
-> Demo video available on request — contact [Sidprasad07@gmail.com](mailto:Sidprasad07@gmail.com)
+> Demo video available on request — [Sidprasad07@gmail.com](mailto:Sidprasad07@gmail.com)
 
 ---
 
